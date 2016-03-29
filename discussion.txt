@@ -1,0 +1,8 @@
+- what does processing a whole page per call mean?
+- implement direct pointers, clean tuple and page headers
+- implement freezing a relation (vs whole database) and implement a read-only mode?
+- images: change tuple pointers to new tid
+- get rid of MVCC code
+  - get rid of locking for reads
+  - no need to look for the "right" version
+  - get rid of previous versions also?
