@@ -134,6 +134,28 @@ static void EvalPlanQualStart(EPQState *epqstate, EState *parentestate,
 void
 ExecutorStart(QueryDesc *queryDesc, int eflags)
 {
+	if(queryDesc->operation == CMD_SELECT){
+		printf("SELECT\n");
+		ListCell *l;
+
+		List *rangeTable = queryDesc->plannedstmt->rtable;
+		Oid resultOid = getrelid(0, rangeTable);
+		Relation resultRelation = heap_open(resultOid, RowExclusiveLock);
+		// if(rangeTable){
+		// 	printf("NOT UTILITY\n");
+		// 	foreach(l, rangeTable){
+		// 		printf("NO\n");
+		// 	}
+		// }
+		// if(queryDesc->utilitystmt){
+		// 	printf("UTILITY\n");
+		// 	// foreach(l, resultRelations){
+		// 	// 	printf("NO\n");
+		// 	// }
+		// }
+			resultRelation->rd_rel->frozen = true;
+			printf("%d\n", resultRelation->rd_rel->frozen);
+	}
 	if (ExecutorStart_hook)
 		(*ExecutorStart_hook) (queryDesc, eflags);
 	else

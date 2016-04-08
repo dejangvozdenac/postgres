@@ -78,6 +78,7 @@ CATALOG(pg_class,1259) BKI_BOOTSTRAP BKI_ROWTYPE_OID(83) BKI_SCHEMA_MACRO
 	aclitem		relacl[1];		/* access permissions */
 	text		reloptions[1];	/* access-method-specific options */
 #endif
+	bool 		frozen; 		/* true if marked as read only by the user*/
 } FormData_pg_class;
 
 /* Size of fixed part of pg_class tuples, not counting var-length fields */
@@ -96,7 +97,7 @@ typedef FormData_pg_class *Form_pg_class;
  * ----------------
  */
 
-#define Natts_pg_class						31
+#define Natts_pg_class						32
 #define Anum_pg_class_relname				1
 #define Anum_pg_class_relnamespace			2
 #define Anum_pg_class_reltype				3
@@ -128,6 +129,7 @@ typedef FormData_pg_class *Form_pg_class;
 #define Anum_pg_class_relminmxid			29
 #define Anum_pg_class_relacl				30
 #define Anum_pg_class_reloptions			31
+#define Anum_pg_class_frozen 				32
 
 /* ----------------
  *		initial contents of pg_class
