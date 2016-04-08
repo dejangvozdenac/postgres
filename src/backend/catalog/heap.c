@@ -780,7 +780,7 @@ InsertPgClassTuple(Relation pg_class_desc,
 	memset(values, 0, sizeof(values));
 	memset(nulls, false, sizeof(nulls));
 
-	values[Anum_pg_class_frozen - 1] = false;
+	values[Anum_pg_class_frozen - 1] = false; /* Jay/Dejan */
 	values[Anum_pg_class_relname - 1] = NameGetDatum(&rd_rel->relname);
 	values[Anum_pg_class_relnamespace - 1] = ObjectIdGetDatum(rd_rel->relnamespace);
 	values[Anum_pg_class_reltype - 1] = ObjectIdGetDatum(rd_rel->reltype);

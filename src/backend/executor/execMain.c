@@ -135,6 +135,7 @@ void
 ExecutorStart(QueryDesc *queryDesc, int eflags)
 {
 	if(queryDesc->operation == CMD_SELECT){
+		/* Jay/Dejan*/
 		printf("SELECT\n");
 		ListCell *l;
 
@@ -155,6 +156,7 @@ ExecutorStart(QueryDesc *queryDesc, int eflags)
 		// }
 			resultRelation->rd_rel->frozen = true;
 			printf("%d\n", resultRelation->rd_rel->frozen);
+		/* Jay/Dejan*/
 	}
 	if (ExecutorStart_hook)
 		(*ExecutorStart_hook) (queryDesc, eflags);

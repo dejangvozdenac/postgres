@@ -31,7 +31,7 @@
 
 CATALOG(pg_class,1259) BKI_BOOTSTRAP BKI_ROWTYPE_OID(83) BKI_SCHEMA_MACRO
 {
-	NameData	relname;		/* class name */
+	NameData	relname;		/* Jay/Dejan class name */
 	Oid			relnamespace;	/* OID of namespace containing this class */
 	Oid			reltype;		/* OID of entry in pg_type for table's
 								 * implicit row type */
@@ -97,7 +97,7 @@ typedef FormData_pg_class *Form_pg_class;
  * ----------------
  */
 
-#define Natts_pg_class						32
+#define Natts_pg_class						32 /* Jay/Dejan from 31 */
 #define Anum_pg_class_relname				1
 #define Anum_pg_class_relnamespace			2
 #define Anum_pg_class_reltype				3
@@ -129,7 +129,7 @@ typedef FormData_pg_class *Form_pg_class;
 #define Anum_pg_class_relminmxid			29
 #define Anum_pg_class_relacl				30
 #define Anum_pg_class_reloptions			31
-#define Anum_pg_class_frozen 				32
+#define Anum_pg_class_frozen 				32 /* Jay/Dejan */
 
 /* ----------------
  *		initial contents of pg_class
