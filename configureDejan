@@ -1,0 +1,13 @@
+./configure
+make
+sudo su
+make install
+mkdir /usr/local/pgsql/data
+chown postgres /usr/local/pgsql/data
+su - postgres
+/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
+/usr/local/pgsql/bin/postgres -D /usr/local/pgsql/data 
+
+
+/usr/local/pgsql/bin/createdb test
+/usr/local/pgsql/bin/psql test

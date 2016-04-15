@@ -155,7 +155,8 @@ ExecutorStart(QueryDesc *queryDesc, int eflags)
 		// 	// }
 		// }
 			resultRelation->rd_rel->frozen = true;
-			printf("%d\n", resultRelation->rd_rel->frozen);
+			printf("Exec main is relation frozen: %d\n", resultRelation->rd_rel->frozen);
+			heap_close(resultRelation, RowExclusiveLock);
 		/* Jay/Dejan*/
 	}
 	if (ExecutorStart_hook)

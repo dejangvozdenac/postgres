@@ -124,11 +124,12 @@ ExecCheckPlanOutput(Relation resultRel, List *targetList)
 								   attno)));
 		}
 	}
-	if (attno != resultDesc->natts)
-		ereport(ERROR,
-				(errcode(ERRCODE_DATATYPE_MISMATCH),
-		  errmsg("table row type and query-specified row type do not match"),
-				 errdetail("Query has too few columns.")));
+	/* Jay/Dejan TODO error in relation init */
+	// if (attno != resultDesc->natts)
+		// ereport(ERROR,
+		// 		(errcode(ERRCODE_DATATYPE_MISMATCH),
+		//   errmsg("table row type and query-specified row type do not match"),
+		// 		 errdetail("Query has too few columns Query mismatch attno - %d, desc natts - %d\n", attno, resultDesc->natts)));
 }
 
 /*

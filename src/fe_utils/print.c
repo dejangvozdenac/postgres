@@ -326,6 +326,7 @@ fputnbytes(FILE *f, const char *str, size_t n)
 static void
 print_separator(struct separator sep, FILE *fout)
 {
+	fputc('!',fout);
 	if (sep.separator_zero)
 		fputc('\000', fout);
 	else if (sep.separator)

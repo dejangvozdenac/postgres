@@ -2328,6 +2328,7 @@ AlterDomainNotNull(List *names, bool notNull)
 			{
 				int			i;
 
+				printf("scanning tuple ++\n");
 				/* Test attributes that are of the domain */
 				for (i = 0; i < rtc->natts; i++)
 				{

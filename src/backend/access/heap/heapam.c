@@ -215,6 +215,9 @@ static const int MultiXactStatusLock[MaxMultiXactStatus + 1] =
 static void
 initscan(HeapScanDesc scan, ScanKey key, bool keep_startblock)
 {
+	printf("Init scan relation id: %d\n",scan->rs_rd->rd_id);
+	printf("Init scan is relation frozen: %d\n",scan->rs_rd->rd_rel->frozen);
+
 	bool		allow_strat;
 	bool		allow_sync;
 
@@ -1783,7 +1786,7 @@ HeapTuple
 heap_getnext(HeapScanDesc scan, ScanDirection direction)
 {
 	/* Note: no locking manipulations needed */
-
+	printf("getting next \n");
 	HEAPDEBUG_1;				/* heap_getnext( info ) */
 
 	if (scan->rs_pageatatime)
@@ -1855,6 +1858,7 @@ heap_fetch(Relation relation,
 		   bool keep_buf,
 		   Relation stats_relation)
 {
+	printf("heapam.c - fetch tuple\n");
 	ItemPointer tid = &(tuple->t_self);
 	ItemId		lp;
 	Buffer		buffer;
@@ -2127,6 +2131,7 @@ bool
 heap_hot_search(ItemPointer tid, Relation relation, Snapshot snapshot,
 				bool *all_dead)
 {
+	printf("heapam.c - hot fetch tuple\n");
 	bool		result;
 	Buffer		buffer;
 	HeapTupleData heapTuple;
@@ -2156,6 +2161,7 @@ heap_get_latest_tid(Relation relation,
 					Snapshot snapshot,
 					ItemPointer tid)
 {
+	printf("heapam.c - get lastest tid fetch tuple\n");
 	BlockNumber blk;
 	ItemPointerData ctid;
 	TransactionId priorXmax;

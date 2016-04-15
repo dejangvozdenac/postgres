@@ -2851,6 +2851,7 @@ RelationBuildLocalRelation(const char *relname,
 						   char relpersistence,
 						   char relkind)
 {
+	printf("Relation builder\n");
 	Relation	rel;
 	MemoryContext oldcxt;
 	int			natts = tupDesc->natts;
@@ -2956,6 +2957,7 @@ RelationBuildLocalRelation(const char *relname,
 	rel->rd_rel->relhasoids = rel->rd_att->tdhasoid;
 	rel->rd_rel->relnatts = natts;
 	rel->rd_rel->reltype = InvalidOid;
+	rel->rd_rel->frozen = false; /* Jay/Dejan relation initially not frozen */
 	/* needed when bootstrapping: */
 	rel->rd_rel->relowner = BOOTSTRAP_SUPERUSERID;
 

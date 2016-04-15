@@ -635,6 +635,7 @@ PostmasterMain(int argc, char *argv[])
 	 */
 	while ((opt = getopt(argc, argv, "B:bc:C:D:d:EeFf:h:ijk:lN:nOo:Pp:r:S:sTt:W:-:")) != -1)
 	{
+
 		switch (opt)
 		{
 			case 'B':
@@ -1294,7 +1295,7 @@ PostmasterMain(int argc, char *argv[])
 
 	/* Some workers may be scheduled to start now */
 	maybe_start_bgworker();
-
+ 
 	status = ServerLoop();
 
 	/*

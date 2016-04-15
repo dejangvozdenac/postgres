@@ -771,6 +771,7 @@ InsertPgClassTuple(Relation pg_class_desc,
 				   Datum relacl,
 				   Datum reloptions)
 {
+	printf("Creating relation %d\n", new_rel_oid);
 	Form_pg_class rd_rel = new_rel_desc->rd_rel;
 	Datum		values[Natts_pg_class];
 	bool		nulls[Natts_pg_class];
