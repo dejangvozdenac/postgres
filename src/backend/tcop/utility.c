@@ -1524,8 +1524,12 @@ ProcessUtilitySlow(Node *parsetree,
 				address = CreateAccessMethod((CreateAmStmt *) parsetree);
 				break;
 
+			case T_ReadOnlyStmt:
+				address = ExecReadOnlyStmt((ReadOnlyStmt *) parsetree);			/* Jay/Dejan */
+				break;
+
 			default:
-				elog(ERROR, "unrecognized node type: %d",
+				elog(ERROR, "unrecognized node type6: %d",
 					 (int) nodeTag(parsetree));
 				break;
 		}
@@ -2679,8 +2683,12 @@ CreateCommandTag(Node *parsetree)
 			}
 			break;
 
+		case T_ReadOnlyStmt:			/*Jay/Dejan */
+			tag = "READONLY";
+			break;
+
 		default:
-			elog(WARNING, "unrecognized node type: %d",
+			elog(WARNING, "unrecognized node type7: %d",
 				 (int) nodeTag(parsetree));
 			tag = "???";
 			break;
@@ -3152,7 +3160,7 @@ GetCommandLogLevel(Node *parsetree)
 			break;
 
 		default:
-			elog(WARNING, "unrecognized node type: %d",
+			elog(WARNING, "unrecognized node type 8: %d",
 				 (int) nodeTag(parsetree));
 			lev = LOGSTMT_ALL;
 			break;

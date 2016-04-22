@@ -20,6 +20,7 @@
 #include "utils/relcache.h"
 
 extern ObjectAddress ExecRenameStmt(RenameStmt *stmt);
+extern ObjectAddress ExecReadOnlyStmt(ReadOnlyStmt *stmt); /* Jay/Dejan */
 
 extern ObjectAddress ExecAlterObjectSchemaStmt(AlterObjectSchemaStmt *stmt,
 						  ObjectAddress *oldSchemaAddr);

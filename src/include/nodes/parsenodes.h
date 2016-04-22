@@ -2158,6 +2158,14 @@ typedef struct CreatePLangStmt
  * but for CREATE we mark the type because the defaults vary.
  * ----------------------
  */
+
+/* Jay/Dejan */
+typedef struct ReadOnlyStmt
+{
+	NodeTag		type;
+	RangeVar   *relation;		/* relation to freeze */
+} ReadOnlyStmt;
+
 typedef enum RoleStmtType
 {
 	ROLESTMT_ROLE,

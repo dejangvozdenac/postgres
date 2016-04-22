@@ -262,7 +262,7 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 		VariableResetStmt VariableSetStmt VariableShowStmt
 		ViewStmt CheckPointStmt CreateConversionStmt
 		DeallocateStmt PrepareStmt ExecuteStmt
-		DropOwnedStmt ReassignOwnedStmt
+		DropOwnedStmt ReassignOwnedStmt ReadOnlyStmt
 		AlterTSConfigurationStmt AlterTSDictionaryStmt
 		CreateMatViewStmt RefreshMatViewStmt CreateAmStmt
 
@@ -620,7 +620,7 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 
 	QUOTE
 
-	RANGE READ REAL REASSIGN RECHECK RECURSIVE REF REFERENCES REFRESH REINDEX
+	RANGE READ READONLY REAL REASSIGN RECHECK RECURSIVE REF REFERENCES REFRESH REINDEX
 	RELATIVE_P RELEASE RENAME REPEATABLE REPLACE REPLICA
 	RESET RESTART RESTRICT RETURNING RETURNS REVOKE RIGHT ROLE ROLLBACK ROLLUP
 	ROW ROWS RULE
@@ -858,6 +858,7 @@ stmt :
 			| LockStmt
 			| NotifyStmt
 			| PrepareStmt
+			| ReadOnlyStmt
 			| ReassignOwnedStmt
 			| ReindexStmt
 			| RemoveAggrStmt
@@ -881,6 +882,21 @@ stmt :
 			| /*EMPTY*/
 				{ $$ = NULL; }
 		;
+
+/*****************************************************************************
+ *
+ * Freeze a table and make it read only
+ *
+ *****************************************************************************/
+
+ReadOnlyStmt:	READONLY any_name
+				{
+					ReadOnlyStmt *n = makeNode(ReadOnlyStmt);
+					n->relation = makeRangeVarFromAnyName($2, @2, yyscanner);
+					$$ = (Node *)n;
+				}
+		;
+
 
 /*****************************************************************************
  *
@@ -14100,6 +14116,7 @@ reserved_keyword:
 			| ORDER
 			| PLACING
 			| PRIMARY
+			| READONLY
 			| REFERENCES
 			| RETURNING
 			| SELECT

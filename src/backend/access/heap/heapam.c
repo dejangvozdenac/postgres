@@ -1786,7 +1786,7 @@ HeapTuple
 heap_getnext(HeapScanDesc scan, ScanDirection direction)
 {
 	/* Note: no locking manipulations needed */
-	printf("getting next \n");
+	// printf("getting next \n");
 	HEAPDEBUG_1;				/* heap_getnext( info ) */
 
 	if (scan->rs_pageatatime)

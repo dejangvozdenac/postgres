@@ -2580,6 +2580,40 @@ RenameRelation(RenameStmt *stmt)
 	return address;
 }
 
+/* Jay/Dejan */
+ObjectAddress
+MakeRelationReadOnly(ReadOnlyStmt *stmt)
+{
+	Oid			relid;
+	ObjectAddress address;
+
+	printf("HI: %s\n", stmt->relation->relname);
+
+	relid = RangeVarGetRelid(stmt->relation, AccessExclusiveLock ,false);
+
+	// printf("HI\n");
+
+	Relation resultRelation = heap_open(relid, RowExclusiveLock);
+	// // if(rangeTable){
+	// // 	printf("NOT UTILITY\n");
+	// // 	foreach(l, rangeTable){
+	// // 		printf("NO\n");
+	// // 	}
+	// // }
+	// // if(queryDesc->utilitystmt){
+	// // 	printf("UTILITY\n");
+	// // 	// foreach(l, resultRelations){
+	// // 	// 	printf("NO\n");
+	// // 	// }
+	// // }
+	resultRelation->rd_rel->frozen = true;
+	printf("Exec main is relation frozen: %d\n", resultRelation->rd_rel->frozen);
+	heap_close(resultRelation, RowExclusiveLock);
+
+	ObjectAddressSet(address, RelationRelationId, relid);
+
+	return address;
+}
 /*
  *		RenameRelationInternal - change the name of a relation
  *

@@ -390,6 +390,14 @@ ExecRenameStmt(RenameStmt *stmt)
 	}
 }
 
+/* Jay/Dejan */
+ObjectAddress
+ExecReadOnlyStmt(ReadOnlyStmt *stmt)
+{
+	return MakeRelationReadOnly(stmt);
+}
+
+
 /*
  * Executes an ALTER OBJECT / SET SCHEMA statement.  Based on the object
  * type, the function appropriate to that type is executed.

@@ -403,6 +403,7 @@ typedef enum NodeTag
 	T_AlterPolicyStmt,
 	T_CreateTransformStmt,
 	T_CreateAmStmt,
+	T_ReadOnlyStmt, 		/*Jay/Dejan */
 
 	/*
 	 * TAGS FOR PARSE TREE NODES (parsenodes.h)
@@ -597,6 +598,7 @@ typedef enum CmdType
 	CMD_UPDATE,					/* update stmt */
 	CMD_INSERT,					/* insert stmt */
 	CMD_DELETE,
+	CMD_READONLY,				/* Jay/Dejan readonly stmt*/
 	CMD_UTILITY,				/* cmds like create, destroy, copy, vacuum,
 								 * etc. */
 	CMD_NOTHING					/* dummy command for instead nothing rules

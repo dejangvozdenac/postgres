@@ -2,3 +2,13 @@ gp_class.h          --      adding field
 heap.c              --      setting field to false on init
 
 execMain            --      freezing on first read
+
+gram.y              --      added readonly as a keyword
+
+nodes.h             --      added readonly as a cmd type, added T_ReadOnlyStmt tag for node creation
+
+parsenodes.h        --      added readonlystmt as a struct
+
+alter.c             --      take parsed readonystmt and send it to tablecmd.c
+
+tablecmds.c         --      the actual work of readonly statement
