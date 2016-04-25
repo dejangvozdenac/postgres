@@ -2613,7 +2613,39 @@ MakeRelationReadOnly(ReadOnlyStmt *stmt)
 	ObjectAddressSet(address, RelationRelationId, relid);
 
 	return address;
+	
+	// Oid				relid;
+	// Relation 		class_rel, target_rel;
+	// ObjectAddress 	address;
+	// HeapTuple 		tuple;
+	// Form_pg_class 	relform;
+
+
+	// relid = RangeVarGetRelid(stmt->relation, AccessExclusiveLock ,false);
+	// target_rel = relation_open(relid, AccessExclusiveLock);
+	// class_rel = heap_open(RelationRelationId, RowExclusiveLock);
+
+	
+	// tuple = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relid));
+	// relform = (Form_pg_class) GETSTRUCT(tuple);
+	// printf("BEFORE\n");
+	// printf("tblcmds is relation frozen: %d\n", relform->frozen);
+	// relform->frozen = true;
+	// simple_heap_update(class_rel, &tuple->t_self, tuple);
+	// printf("AFTER update\n");
+	// CatalogUpdateIndexes(class_rel, tuple);
+	// InvokeObjectPostAlterHookArg(RelationRelationId, relid, 0,
+	// 							 InvalidOid, false);
+
+	// printf("tblcmds is relation frozen: %d\n", relform->frozen);
+	// heap_freetuple(tuple);
+	// heap_close(class_rel, RowExclusiveLock);
+	// relation_close(target_rel, NoLock);
+	// ObjectAddressSet(address, RelationRelationId, relid);
+
+	// return address;
 }
+
 /*
  *		RenameRelationInternal - change the name of a relation
  *
@@ -9075,7 +9107,7 @@ ATExecChangeOwner(Oid relationOid, Oid newOwnerId, bool recursing, LOCKMODE lock
 
 		repl_repl[Anum_pg_class_relowner - 1] = true;
 		repl_val[Anum_pg_class_relowner - 1] = ObjectIdGetDatum(newOwnerId);
-
+// 
 		/*
 		 * Determine the modified ACL for the new owner.  This is only
 		 * necessary when the ACL is non-null.

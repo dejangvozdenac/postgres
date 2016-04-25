@@ -215,8 +215,9 @@ static const int MultiXactStatusLock[MaxMultiXactStatus + 1] =
 static void
 initscan(HeapScanDesc scan, ScanKey key, bool keep_startblock)
 {
-	printf("Init scan relation id: %d\n",scan->rs_rd->rd_id);
-	printf("Init scan is relation frozen: %d\n",scan->rs_rd->rd_rel->frozen);
+	/*Jay/Dejan*/
+	// printf("Init scan relation id: %d\n",scan->rs_rd->rd_id);
+	// printf("Init scan is relation frozen: %d\n",scan->rs_rd->rd_rel->frozen);
 
 	bool		allow_strat;
 	bool		allow_sync;

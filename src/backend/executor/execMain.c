@@ -59,6 +59,7 @@
 #include "utils/rls.h"
 #include "utils/snapmgr.h"
 #include "utils/tqual.h"
+#include "utils/syscache.h"
 
 
 /* Hooks for plugins to get control in ExecutorStart/Run/Finish/End */
@@ -134,6 +135,7 @@ static void EvalPlanQualStart(EPQState *epqstate, EState *parentestate,
 void
 ExecutorStart(QueryDesc *queryDesc, int eflags)
 {
+	
 	/* Jay/Dejan */
 	ListCell *l;
 	List *rangeTable = queryDesc->plannedstmt->rtable;
@@ -141,13 +143,42 @@ ExecutorStart(QueryDesc *queryDesc, int eflags)
 	Relation resultRelation = heap_open(resultOid, RowExclusiveLock);
 
 	// TODO: lower level lock for just checking if frozen?
-	if (resultRelation->rd_rel->frozen && queryDesc->operation != CMD_SELECT) {
-		printf("Frozen table %d only allows SELECTs.\n", resultOid);
+	// printf("%d\n", resultRelation->rd_rel->frozen);
+	if (resultRelation->rd_rel->frozen&&queryDesc->operation != CMD_SELECT) {
 		heap_close(resultRelation, RowExclusiveLock);
-		return;
+		elog(ERROR, "Frozen table %d only allows SELECTs.\n",
+				 resultOid);
 	}
 
 	heap_close(resultRelation, RowExclusiveLock);
+	/* Jay/Dejan */
+
+
+
+	// ListCell *l;
+	// List *rangeTable = queryDesc->plannedstmt->rtable;
+	// Oid resultOid = getrelid(0, rangeTable);
+	// Relation targetrelation = relation_open(resultOid, AccessExclusiveLock);
+	// Relation relrelation = heap_open(RelationRelationId, RowExclusiveLock);
+	// HeapTuple tuple = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(resultOid));
+	// Form_pg_class relform = (Form_pg_class) GETSTRUCT(tuple);
+	// printf("oid? %d\n", relform->reltablespace);
+	// printf("Frozen? %d\n", relform->frozen);
+	// // printf("relname? %s\n", resultRelation->rd_rel->relname);
+	// // printf("name? %s\n", resultRelation->rd_rel->relname);
+
+
+
+	// // TODO: lower level lock for just checking if frozen?
+	// // if (resultRelation->rd_rel->frozen && queryDesc->operation != CMD_SELECT) {
+	// // 	printf("Frozen table %d only allows SELECTs.\n", resultOid);
+	// // 	heap_close(resultRelation, RowExclusiveLock);
+	// // 	return;
+	// // }
+
+	// heap_freetuple(tuple);
+	// heap_close(relrelation, RowExclusiveLock);
+	// relation_close(targetrelation, NoLock);
 	/* Jay/Dejan */
 
 	if (ExecutorStart_hook)
