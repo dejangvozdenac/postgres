@@ -2587,8 +2587,6 @@ MakeRelationReadOnly(ReadOnlyStmt *stmt)
 	Oid			relid;
 	ObjectAddress address;
 
-	printf("HI: %s\n", stmt->relation->relname);
-
 	relid = RangeVarGetRelid(stmt->relation, AccessExclusiveLock ,false);
 
 	// printf("HI\n");
@@ -2607,7 +2605,6 @@ MakeRelationReadOnly(ReadOnlyStmt *stmt)
 	// // 	// }
 	// // }
 	resultRelation->rd_rel->frozen = true;
-	printf("Exec main is relation frozen: %d\n", resultRelation->rd_rel->frozen);
 	heap_close(resultRelation, RowExclusiveLock);
 
 	ObjectAddressSet(address, RelationRelationId, relid);

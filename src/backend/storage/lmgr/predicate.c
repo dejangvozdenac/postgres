@@ -469,6 +469,11 @@ static void OnConflict_CheckForSerializationFailure(const SERIALIZABLEXACT *read
 static inline bool
 PredicateLockingNeededForRelation(Relation relation)
 {
+	/* Jay/Dejan */
+	if (relation->rd_rel->frozen == 1 || true) {
+		return false;
+	}
+
 	return !(relation->rd_id < FirstBootstrapObjectId ||
 			 RelationUsesLocalBuffers(relation) ||
 			 relation->rd_rel->relkind == RELKIND_MATVIEW);
@@ -488,9 +493,16 @@ PredicateLockingNeededForRelation(Relation relation)
 static inline bool
 SerializationNeededForRead(Relation relation, Snapshot snapshot)
 {
-	/* Nothing to do if this is not a serializable transaction */
-	if (MySerializableXact == InvalidSerializableXact)
+	/* Jay/Dejan */
+	/* skip predicate locking if the table is frozen */
+	if (relation->rd_rel->frozen == 1 || true) {
 		return false;
+	}
+
+	/* Nothing to do if this is not a serializable transaction */
+	if (MySerializableXact == InvalidSerializableXact) {
+		return false;
+	}
 
 	/*
 	 * Don't acquire locks or conflict when scanning with a special snapshot.
@@ -499,8 +511,9 @@ SerializationNeededForRead(Relation relation, Snapshot snapshot)
 	 * CheckTableForSerializableConflictIn() to participate serialization, but
 	 * the scans involved don't need serialization.
 	 */
-	if (!IsMVCCSnapshot(snapshot))
+	if (!IsMVCCSnapshot(snapshot)) {
 		return false;
+	}
 
 	/*
 	 * Check if we have just become "RO-safe". If we have, immediately release
@@ -519,8 +532,9 @@ SerializationNeededForRead(Relation relation, Snapshot snapshot)
 	}
 
 	/* Check if the relation doesn't participate in predicate locking */
-	if (!PredicateLockingNeededForRelation(relation))
+	if (!PredicateLockingNeededForRelation(relation)) {
 		return false;
+	}
 
 	return true;				/* no excuse to skip predicate locking */
 }
@@ -1587,7 +1601,7 @@ GetSerializableTransactionSnapshot(Snapshot snapshot)
 				 errmsg("cannot use serializable mode in a hot standby"),
 				 errdetail("\"default_transaction_isolation\" is set to \"serializable\"."),
 				 errhint("You can use \"SET default_transaction_isolation = 'repeatable read'\" to change the default.")));
-
+	
 	/*
 	 * A special optimization is available for SERIALIZABLE READ ONLY
 	 * DEFERRABLE transactions -- we can wait for a suitable snapshot and
@@ -1863,6 +1877,11 @@ RegisterPredicateLockingXid(TransactionId xid)
 bool
 PageIsPredicateLocked(Relation relation, BlockNumber blkno)
 {
+	/* Jay/Dejan */
+	if (relation->rd_rel->frozen == 1 || true) {
+		return false;
+	}
+
 	PREDICATELOCKTARGETTAG targettag;
 	uint32		targettaghash;
 	LWLock	   *partitionLock;
@@ -2474,6 +2493,11 @@ PredicateLockTuple(Relation relation, HeapTuple tuple, Snapshot snapshot)
 	ItemPointer tid;
 	TransactionId targetxmin;
 
+	/* Jay/Dejan */
+	if (relation->rd_rel->frozen == 1 || true) {
+		return;
+	}
+
 	if (!SerializationNeededForRead(relation, snapshot))
 		return;
 
@@ -3042,6 +3066,11 @@ PredicateLockPageSplit(Relation relation, BlockNumber oldblkno,
 	PREDICATELOCKTARGETTAG oldtargettag;
 	PREDICATELOCKTARGETTAG newtargettag;
 	bool		success;
+
+	/* Jay/Dejan */
+	if (relation->rd_rel->frozen == 1 || true) {
+		return;
+	}
 
 	/*
 	 * Bail out quickly if there are no serializable transactions running.
@@ -4337,6 +4366,11 @@ CheckForSerializableConflictIn(Relation relation, HeapTuple tuple,
 void
 CheckTableForSerializableConflictIn(Relation relation)
 {
+	/* Jay/Dejan */
+	if (relation->rd_rel->frozen) {
+		return;
+	}
+
 	HASH_SEQ_STATUS seqstat;
 	PREDICATELOCKTARGET *target;
 	Oid			dbId;

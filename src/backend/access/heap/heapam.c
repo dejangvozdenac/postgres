@@ -1483,7 +1483,9 @@ heap_beginscan_internal(Relation relation, Snapshot snapshot,
 	/*
 	 * we can use page-at-a-time mode if it's an MVCC-safe snapshot
 	 */
-	scan->rs_pageatatime = allow_pagemode && IsMVCCSnapshot(snapshot);
+	// scan->rs_pageatatime = allow_pagemode && IsMVCCSnapshot(snapshot);
+	/* Jay/Dejan */
+	scan->rs_pageatatime = relation->rd_rel->frozen == 1 || (allow_pagemode && IsMVCCSnapshot(snapshot)) || true;
 
 	/*
 	 * For a seqscan in a serializable transaction, acquire a predicate lock
@@ -1859,7 +1861,6 @@ heap_fetch(Relation relation,
 		   bool keep_buf,
 		   Relation stats_relation)
 {
-	printf("heapam.c - fetch tuple\n");
 	ItemPointer tid = &(tuple->t_self);
 	ItemId		lp;
 	Buffer		buffer;
@@ -2132,7 +2133,6 @@ bool
 heap_hot_search(ItemPointer tid, Relation relation, Snapshot snapshot,
 				bool *all_dead)
 {
-	printf("heapam.c - hot fetch tuple\n");
 	bool		result;
 	Buffer		buffer;
 	HeapTupleData heapTuple;
@@ -2162,7 +2162,6 @@ heap_get_latest_tid(Relation relation,
 					Snapshot snapshot,
 					ItemPointer tid)
 {
-	printf("heapam.c - get lastest tid fetch tuple\n");
 	BlockNumber blk;
 	ItemPointerData ctid;
 	TransactionId priorXmax;
