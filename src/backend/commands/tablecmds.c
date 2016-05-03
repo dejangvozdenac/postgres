@@ -2584,66 +2584,56 @@ RenameRelation(RenameStmt *stmt)
 ObjectAddress
 MakeRelationReadOnly(ReadOnlyStmt *stmt)
 {
-	Oid			relid;
-	ObjectAddress address;
+	// Oid			relid;
+	// ObjectAddress address;
 
-	printf("HI: %s\n", stmt->relation->relname);
-
-	relid = RangeVarGetRelid(stmt->relation, AccessExclusiveLock ,false);
-
-	// printf("HI\n");
-
-	Relation resultRelation = heap_open(relid, RowExclusiveLock);
-	// // if(rangeTable){
-	// // 	printf("NOT UTILITY\n");
-	// // 	foreach(l, rangeTable){
-	// // 		printf("NO\n");
-	// // 	}
-	// // }
-	// // if(queryDesc->utilitystmt){
-	// // 	printf("UTILITY\n");
-	// // 	// foreach(l, resultRelations){
-	// // 	// 	printf("NO\n");
-	// // 	// }
-	// // }
-	resultRelation->rd_rel->frozen = true;
-	printf("Exec main is relation frozen: %d\n", resultRelation->rd_rel->frozen);
-	heap_close(resultRelation, RowExclusiveLock);
-
-	ObjectAddressSet(address, RelationRelationId, relid);
-
-	return address;
-	
-	// Oid				relid;
-	// Relation 		class_rel, target_rel;
-	// ObjectAddress 	address;
-	// HeapTuple 		tuple;
-	// Form_pg_class 	relform;
-
+	// printf("HI: %s\n", stmt->relation->relname);
 
 	// relid = RangeVarGetRelid(stmt->relation, AccessExclusiveLock ,false);
-	// target_rel = relation_open(relid, AccessExclusiveLock);
-	// class_rel = heap_open(RelationRelationId, RowExclusiveLock);
 
-	
-	// tuple = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relid));
-	// relform = (Form_pg_class) GETSTRUCT(tuple);
-	// printf("BEFORE\n");
-	// printf("tblcmds is relation frozen: %d\n", relform->frozen);
-	// relform->frozen = true;
-	// simple_heap_update(class_rel, &tuple->t_self, tuple);
-	// printf("AFTER update\n");
-	// CatalogUpdateIndexes(class_rel, tuple);
-	// InvokeObjectPostAlterHookArg(RelationRelationId, relid, 0,
-	// 							 InvalidOid, false);
 
-	// printf("tblcmds is relation frozen: %d\n", relform->frozen);
-	// heap_freetuple(tuple);
-	// heap_close(class_rel, RowExclusiveLock);
-	// relation_close(target_rel, NoLock);
+	// Relation resultRelation = heap_open(relid, RowExclusiveLock);
+	// resultRelation->rd_rel->frozen = true;
+	// printf("Exec main is relation frozen: %d\n", resultRelation->rd_rel->frozen);
+	// heap_close(resultRelation, RowExclusiveLock);
+
 	// ObjectAddressSet(address, RelationRelationId, relid);
 
 	// return address;
+	
+	Oid				relid, namespaceId;
+	Relation 		class_rel, target_rel;
+	ObjectAddress 	address;
+	HeapTuple 		tuple;
+	Form_pg_class 	relform;
+
+
+	relid = RangeVarGetRelid(stmt->relation, AccessExclusiveLock ,false);
+	target_rel = relation_open(relid, AccessExclusiveLock);
+	namespaceId = RelationGetNamespace(target_rel);
+
+	class_rel = heap_open(RelationRelationId, RowExclusiveLock);
+
+	
+	tuple = SearchSysCacheCopy1(RELOID, ObjectIdGetDatum(relid));
+	relform = (Form_pg_class) GETSTRUCT(tuple);
+	printf("BEFORE\n");
+	printf("tblcmds is relation frozen: %d\n", relform->frozen);
+	relform->frozen = true;
+	simple_heap_update(class_rel, &tuple->t_self, tuple);
+	printf("AFTER update\n");
+	CatalogUpdateIndexes(class_rel, tuple);
+	InvokeObjectPostAlterHookArg(RelationRelationId, relid, 0,
+								 InvalidOid, false);
+
+	printf("tblcmds is relation frozen: %d\n", relform->frozen);
+	printf("tblcmds is relation frozen: %d\n", namespaceId);
+	heap_freetuple(tuple);
+	heap_close(class_rel, RowExclusiveLock);
+	relation_close(target_rel, NoLock);
+	ObjectAddressSet(address, RelationRelationId, relid);
+
+	return address;
 }
 
 /*

@@ -488,6 +488,11 @@ PredicateLockingNeededForRelation(Relation relation)
 static inline bool
 SerializationNeededForRead(Relation relation, Snapshot snapshot)
 {
+	if(relation->rd_rel->frozen == 1){
+		printf("READONLY txn\n");
+		return false;
+	}
+
 	/* Nothing to do if this is not a serializable transaction */
 	if (MySerializableXact == InvalidSerializableXact)
 		return false;
