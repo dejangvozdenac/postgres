@@ -1485,7 +1485,7 @@ heap_beginscan_internal(Relation relation, Snapshot snapshot,
 	 */
 	// scan->rs_pageatatime = allow_pagemode && IsMVCCSnapshot(snapshot);
 	/* Jay/Dejan */
-	scan->rs_pageatatime = relation->rd_rel->frozen == 1 || (allow_pagemode && IsMVCCSnapshot(snapshot)) || true;
+	scan->rs_pageatatime = relation->rd_rel->frozen == 1 || (allow_pagemode && IsMVCCSnapshot(snapshot));
 
 	/*
 	 * For a seqscan in a serializable transaction, acquire a predicate lock

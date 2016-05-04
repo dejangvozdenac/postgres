@@ -124,7 +124,7 @@ ExecCheckPlanOutput(Relation resultRel, List *targetList)
 								   attno)));
 		}
 	}
-	/* Jay/Dejan TODO error in relation init */
+	/* Jay/Dejan */
 	// if (attno != resultDesc->natts)
 		// ereport(ERROR,
 		// 		(errcode(ERRCODE_DATATYPE_MISMATCH),

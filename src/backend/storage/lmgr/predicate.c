@@ -470,7 +470,7 @@ static inline bool
 PredicateLockingNeededForRelation(Relation relation)
 {
 	/* Jay/Dejan */
-	if (relation->rd_rel->frozen == 1 || true) {
+	if (relation->rd_rel->frozen == 1) {
 		return false;
 	}
 
@@ -495,7 +495,7 @@ SerializationNeededForRead(Relation relation, Snapshot snapshot)
 {
 	/* Jay/Dejan */
 	/* skip predicate locking if the table is frozen */
-	if (relation->rd_rel->frozen == 1 || true) {
+	if (relation->rd_rel->frozen == 1) {
 		return false;
 	}
 
@@ -1878,7 +1878,7 @@ bool
 PageIsPredicateLocked(Relation relation, BlockNumber blkno)
 {
 	/* Jay/Dejan */
-	if (relation->rd_rel->frozen == 1 || true) {
+	if (relation->rd_rel->frozen == 1) {
 		return false;
 	}
 
@@ -2494,7 +2494,7 @@ PredicateLockTuple(Relation relation, HeapTuple tuple, Snapshot snapshot)
 	TransactionId targetxmin;
 
 	/* Jay/Dejan */
-	if (relation->rd_rel->frozen == 1 || true) {
+	if (relation->rd_rel->frozen == 1) {
 		return;
 	}
 
@@ -3068,7 +3068,7 @@ PredicateLockPageSplit(Relation relation, BlockNumber oldblkno,
 	bool		success;
 
 	/* Jay/Dejan */
-	if (relation->rd_rel->frozen == 1 || true) {
+	if (relation->rd_rel->frozen == 1) {
 		return;
 	}
 
